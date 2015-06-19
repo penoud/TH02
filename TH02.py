@@ -15,18 +15,26 @@ class TH02:
                 if not (PyBCM2835.init()):
                         raise EnvironmentError("Cannot initialize BCM2835.")
                 PyBCM2835.i2c_begin()
-                PyBCM2835.i2c_setSlaveAddress(self.ADDRESS)
-
         def writeReg(self,register,value):
+                PyBCM2835.i2c_setSlaveAddress(self.ADDRESS)
                 PyBCM2835.i2c_write(chr(register)+chr(value),2)
         def readReg(self,register):
+                PyBCM2835.i2c_setSlaveAddress(self.ADDRESS)
                 data=""+chr(0)
                 PyBCM2835.i2c_read_register_rs(chr(register),data,1)
                 return data
         def startFastTempConversion(self):
-                self.writeReg(self.CONFIG_REG,0x11)
+                self.writeReg(self.CONFIG_REG,0x31)
+                PyBCM2835.delay(19)
         def startFastHumidityConversion(self):
+                self.writeReg(self.CONFIG_REG,0x30)
+                PyBCM2835.delay(19)
+        def startTempConversion(self):
+                self.writeReg(self.CONFIG_REG,0x11)
+                PyBCM2835.delay(36)
+        def startHumidityConversion(self):
                 self.writeReg(self.CONFIG_REG,0x10)
+                PyBCM2835.delay(36)
         def setHeaterState(self,value):
                 regValue = self.readReg(self.CONFIG_REG)
                 if(value==1):
