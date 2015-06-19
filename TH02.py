@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import PyBCM2835
+import re
+import inspect
 
 class TH02:
         ADDRESS = 0x40
@@ -16,9 +18,35 @@ class TH02:
                         raise EnvironmentError("Cannot initialize BCM2835.")
                 PyBCM2835.i2c_begin()
         def writeReg(self,register,value):
+		try :
+		    function_call = inspect.stack()[1][4][0].strip()
+
+		    # See if the function_call has "self." in the begining
+		    matched = re.match( '^self\.', function_call )
+		    if not matched :
+		        print 'This is Private Function, Go Away'
+		        return
+		except :
+		    print 'This is Private Function, Go Away'
+		    return
+
+		# This is the real Function, only accessible inside class #
                 PyBCM2835.i2c_setSlaveAddress(self.ADDRESS)
                 PyBCM2835.i2c_write(chr(register)+chr(value),2)
         def readReg(self,register):
+		try :
+		    function_call = inspect.stack()[1][4][0].strip()
+
+		    # See if the function_call has "self." in the begining
+		    matched = re.match( '^self\.', function_call )
+		    if not matched :
+		        print 'This is Private Function, Go Away'
+		        return
+		except :
+		    print 'This is Private Function, Go Away'
+		    return
+
+		# This is the real Function, only accessible inside class #
                 PyBCM2835.i2c_setSlaveAddress(self.ADDRESS)
                 data=""+chr(0)
                 PyBCM2835.i2c_read_register_rs(chr(register),data,1)
