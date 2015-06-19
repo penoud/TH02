@@ -22,12 +22,12 @@ class TH02:
 		    function_call = inspect.stack()[1][4][0].strip()
 
 		    # See if the function_call has "self." in the begining
-		    matched = re.match( '^self\.', function_call )
+		    matched = re.match( '.*self\.writeReg.*', function_call )
 		    if not matched :
-		        print 'This is Private Function, Go Away'
+		        print 'This is Private Function, Go Away, function call =' + function_call
 		        return
 		except :
-		    print 'This is Private Function, Go Away'
+		    print 'This is Private Function, error append, Go Away'
 		    return
 
 		# This is the real Function, only accessible inside class #
@@ -38,19 +38,19 @@ class TH02:
 		    function_call = inspect.stack()[1][4][0].strip()
 
 		    # See if the function_call has "self." in the begining
-		    matched = re.match( '^self\.', function_call )
+		    matched = re.match( '.*self\.readReg.*', function_call )
 		    if not matched :
-		        print 'This is Private Function, Go Away'
+		        print 'This is Private Function, Go Away, function call =' + function_call
 		        return
 		except :
-		    print 'This is Private Function, Go Away'
+		    print 'This is Private Function, error append, Go Away'
 		    return
 
 		# This is the real Function, only accessible inside class #
                 PyBCM2835.i2c_setSlaveAddress(self.ADDRESS)
                 data=""+chr(0)
                 PyBCM2835.i2c_read_register_rs(chr(register),data,1)
-                return data
+                return data[0]
         def startFastTempConversion(self):
                 self.writeReg(self.CONFIG_REG,0x31)
                 PyBCM2835.delay(19)
