@@ -55,13 +55,13 @@ class TH02:
                 self.writeReg(self.CONFIG_REG,0x31)
                 PyBCM2835.delay(19)
         def startFastHumidityConversion(self):
-                self.writeReg(self.CONFIG_REG,0x30)
+                self.writeReg(self.CONFIG_REG,0x21)
                 PyBCM2835.delay(19)
         def startTempConversion(self):
                 self.writeReg(self.CONFIG_REG,0x11)
                 PyBCM2835.delay(36)
         def startHumidityConversion(self):
-                self.writeReg(self.CONFIG_REG,0x10)
+                self.writeReg(self.CONFIG_REG,0x01)
                 PyBCM2835.delay(36)
         def setHeaterState(self,value):
                 regValue = self.readReg(self.CONFIG_REG)
